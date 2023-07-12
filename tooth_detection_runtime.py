@@ -55,6 +55,7 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
+        metainfo=metainfo,
         ann_file='annotations/sample.json',
         data_prefix=dict(img='sample/'),
         filter_cfg=dict(filter_empty_gt=True, min_size=32),
@@ -69,6 +70,7 @@ val_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
+        metainfo=metainfo,
         ann_file='annotations/sample.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
