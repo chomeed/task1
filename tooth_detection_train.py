@@ -70,6 +70,17 @@ def main():
     cfg = Config.fromfile(args.config)
     cfg.launcher = args.launcher
 
+    # attach MmDetWandHook
+    # cfg.log_config.hooks = [
+    # dict(type='TextLoggerHook'),
+    # dict(type='MMDetWandbHook',
+    #      init_kwargs={'project': 'summer23-intern'},
+    #      interval=10,
+    #      log_checkpoint=True,
+    #      log_checkpoint_metadata=True,
+    #      num_eval_images=100)]
+
+
 
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
@@ -117,19 +128,6 @@ def main():
     elif args.resume is not None:
         cfg.resume = True
         cfg.load_from = args.resume
-
-
-
-       # attach MmDetWandHook
-    cfg.log_config.hooks = [
-    dict(type='TextLoggerHook'),
-    dict(type='MMDetWandbHook',
-         init_kwargs={'project': 'summer23-intern'},
-         interval=10,
-         log_checkpoint=True,
-         log_checkpoint_metadata=True,
-         num_eval_images=100)]
-
 
     # build the runner from config
     if 'runner_type' not in cfg:

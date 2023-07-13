@@ -153,6 +153,16 @@ default_hooks = dict(
     sampler_seed=dict(type='DistSamplerSeedHook'),
     visualization=dict(type='DetVisualizationHook'))
 
+custom_hooks = [
+    dict(type='TextLoggerHook'),
+    dict(type='MMDetWandbHook',
+         init_kwargs={'project': 'summer23-intern'},
+         interval=10,
+         log_checkpoint=True,
+         log_checkpoint_metadata=True,
+         num_eval_images=100)]
+
+
 env_cfg = dict(
     cudnn_benchmark=False,
     mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0),
