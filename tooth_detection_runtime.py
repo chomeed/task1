@@ -4,7 +4,7 @@ _base_ = '/home/summer23_intern1/workspace/p1/mmdetection/configs/_base_/models/
 dataset_type = 'CocoDataset'
 data_root = 'data/tooth_detection/'
 metainfo = {
-    'classes': ( 'Teeth defect', 'Tooth num 11', 'Tooth num 12', 'Tooth num 13', 
+    'classes': ('Teeth defect', 'Tooth num 11', 'Tooth num 12', 'Tooth num 13', 
             'Tooth num 14', 'Tooth num 15', 'Tooth num 16', 'Tooth num 17', 
             'Tooth num 18', 'Tooth num 21', 'Tooth num 22', 'Tooth num 23', 
             'Tooth num 24', 'Tooth num 25', 'Tooth num 26', 'Tooth num 27',
@@ -48,7 +48,7 @@ test_pipeline = [
 ]
 # dataloaders
 train_dataloader = dict(
-    batch_size=1,
+    batch_size=2,
     num_workers=2,
     persistent_workers=True,
     sampler=dict(type='DefaultSampler', shuffle=True),
@@ -98,16 +98,21 @@ test_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         data_root=data_root,
-        ann_file=data_root + 'annotations/test2.json',
+        metainfo=metainfo,
+        ann_file='annotations/test2.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
         pipeline=test_pipeline))
 test_evaluator = dict(
     type='CocoMetric',
-    metric='bbox',
+    metric=['bbox', 'proposal'],
     format_only=True,
+    metainfo=metainfo,
     ann_file=data_root + 'annotations/test2.json',
-    outfile_prefix='./work_dirs/tooth_detection/test')
+    outfile_prefix='./work_dirs/tooth_detection/test',
+    backend_args=backend_args,
+    classwise=True,
+    )
 
 # scheduler settings 
 
@@ -168,7 +173,7 @@ visualizer = dict(
 
 
 log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
-
+work_dir = 'work_dirs/tooth_detection_20e'
 log_level = 'INFO'
 load_from = None
 resume = False
