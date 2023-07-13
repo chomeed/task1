@@ -72,47 +72,47 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='annotations/test.json',
+        ann_file='annotations/valid.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
         pipeline=test_pipeline,
         backend_args=backend_args))
-test_dataloader = val_dataloader
+# test_dataloader = val_dataloader
 
 val_evaluator = dict(
     type='CocoMetric',
-    ann_file=data_root + 'annotations/test.json',
+    ann_file=data_root + 'annotations/valid.json',
     metric='bbox',
     format_only=False,
     backend_args=backend_args)
-test_evaluator = val_evaluator
+# test_evaluator = val_evaluator
 
 # inference on test dataset and
 # format the output results for submission.
-# test_dataloader = dict(
-#     batch_size=1,
-#     num_workers=2,
-#     persistent_workers=True,
-#     drop_last=False,
-#     sampler=dict(type='DefaultSampler', shuffle=False),
-#     dataset=dict(
-#         type=dataset_type,
-#         data_root=data_root,
-#         ann_file=data_root + 'annotations/image_info_test-dev2017.json',
-#         data_prefix=dict(img='test2017/'),
-#         test_mode=True,
-#         pipeline=test_pipeline))
-# test_evaluator = dict(
-#     type='CocoMetric',
-#     metric='bbox',
-#     format_only=True,
-#     ann_file=data_root + 'annotations/image_info_test-dev2017.json',
-#     outfile_prefix='./work_dirs/coco_detection/test')
+test_dataloader = dict(
+    batch_size=1,
+    num_workers=2,
+    persistent_workers=True,
+    drop_last=False,
+    sampler=dict(type='DefaultSampler', shuffle=False),
+    dataset=dict(
+        type=dataset_type,
+        data_root=data_root,
+        ann_file=data_root + 'annotations/test2.json',
+        data_prefix=dict(img='sample/'),
+        test_mode=True,
+        pipeline=test_pipeline))
+test_evaluator = dict(
+    type='CocoMetric',
+    metric='bbox',
+    format_only=True,
+    ann_file=data_root + 'annotations/test2.json',
+    outfile_prefix='./work_dirs/tooth_detection/test')
 
 # scheduler settings 
 
 # training schedule for 1x
-train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=96, val_interval=1)
+train_cfg = dict(type='EpochBasedTrainLoop', max_epochs=20, val_interval=1)
 val_cfg = dict(type='ValLoop')
 test_cfg = dict(type='TestLoop')
 
@@ -160,9 +160,13 @@ env_cfg = dict(
     dist_cfg=dict(backend='nccl'),
 )
 
-vis_backends = [dict(type='LocalVisBackend')]
+vis_backends = [dict(type='LocalVisBackend'), dict(type='WandbVisBackend')]
 visualizer = dict(
     type='DetLocalVisualizer', vis_backends=vis_backends, name='visualizer')
+
+from mmengine.visualization import Visualizer
+
+
 log_processor = dict(type='LogProcessor', window_size=50, by_epoch=True)
 
 log_level = 'INFO'
