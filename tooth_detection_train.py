@@ -11,7 +11,7 @@ from mmengine.runner import Runner
 
 from mmdet.utils import setup_cache_size_limit_of_dynamo
 
-import wandb
+# import wandb
 
 
 def parse_args():
@@ -73,14 +73,14 @@ def main():
     cfg.launcher = args.launcher
 
     # attach MmDetWandHook
-    cfg.log_config.hooks = [
-    dict(type='TextLoggerHook'),
-    dict(type='MMDetWandbHook',
-         init_kwargs={'project': 'summer23-intern'},
-         interval=10,
-         log_checkpoint=True,
-         log_checkpoint_metadata=True,
-         num_eval_images=100)]
+    # cfg.log_config.hooks = [
+    # dict(type='TextLoggerHook'),
+    # dict(type='MMDetWandbHook',
+    #      init_kwargs={'project': 'summer23-intern'},
+    #      interval=10,
+    #      log_checkpoint=True,
+    #      log_checkpoint_metadata=True,
+    #      num_eval_images=100)]
 
 
 
