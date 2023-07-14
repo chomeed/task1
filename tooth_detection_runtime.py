@@ -4,17 +4,16 @@ _base_ = '/home/summer23_intern1/workspace/p1/mmdetection/configs/_base_/models/
 dataset_type = 'CocoDataset'
 data_root = 'data/tooth_detection/'
 metainfo = {
-    'classes': ('Teeth defect', 'Tooth num 11', 'Tooth num 12', 'Tooth num 13', 
-            'Tooth num 14', 'Tooth num 15', 'Tooth num 16', 'Tooth num 17', 
-            'Tooth num 18', 'Tooth num 21', 'Tooth num 22', 'Tooth num 23', 
-            'Tooth num 24', 'Tooth num 25', 'Tooth num 26', 'Tooth num 27',
-            'Tooth num 28', 'Tooth num 31', 'Tooth num 32', 'Tooth num 33',
-            'Tooth num 34', 'Tooth num 35', 'Tooth num 36', 'Tooth num 37',
-            'Tooth num 38', 'Tooth num 41', 'Tooth num 42', 'Tooth num 43',
-            'Tooth num 44', 'Tooth num 45', 'Tooth num 46', 'Tooth num 47',
-            'Tooth num 48', 'Phase 1', 'Phase 2', 'Phase 3', 'Amalgam', 
-            'Gold inlay', 'Tooth root exposure', 'Gum inflammation', 
-            'Metal-seramic', 'Gold', 'Metal'),
+    'classes': ('Teeth defect', 'Tooth num 21', 'Tooth num 22', 'Tooth num 23', 
+                'Tooth num 24', 'Tooth num 25', 'Tooth num 26', 'Tooth num 27', 
+                'Tooth num 28', 'Tooth num 31', 'Tooth num 32', 'Tooth num 11', 
+                'Tooth num 33', 'Tooth num 34', 'Tooth num 35', 'Tooth num 36', 
+                'Tooth num 37', 'Tooth num 38', 'Tooth num 41', 'Tooth num 42', 
+                'Tooth num 43', 'Tooth num 44', 'Tooth num 12', 'Tooth num 45', 
+                'Tooth num 46', 'Tooth num 47', 'Tooth num 48', 'Phase 1', 'Phase 2', 'Phase 3', 
+                'Amalgam', 'Gold inlay', 'Tooth root exposure', 'Tooth num 13', 
+                'Gum inflammation', 'Metal-seramic', 'Gold', 'Metal', 'Tooth num 14', 
+                'Tooth num 15', 'Tooth num 16', 'Tooth num 17', 'Tooth num 18'),
     'palette': [(220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228), 
                 (0, 60, 100), (0, 80, 100), (0, 0, 70), (0, 0, 192), (250, 170, 30), 
                 (100, 170, 30), (220, 220, 0), (175, 116, 175), (250, 0, 30), 
@@ -38,9 +37,10 @@ train_pipeline = [
 ]
 test_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
-    dict(type='Resize', scale=(1333, 800), keep_ratio=True),
-    # If you don't have a gt annotation, delete the pipeline
     dict(type='LoadAnnotations', with_bbox=True),
+    # dict(type='Resize', scale=(1333, 800), keep_ratio=True),
+    # If you don't have a gt annotation, delete the pipeline
+    
     dict(
         type='PackDetInputs',
         meta_keys=('img_id', 'img_path', 'ori_shape', 'img_shape',
@@ -99,15 +99,15 @@ test_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='annotations/test2.json',
+        ann_file=data_root+'annotations/test2.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
         pipeline=test_pipeline))
 test_evaluator = dict(
     type='CocoMetric',
     metric=['bbox', 'proposal'],
-    format_only=True,
-    metainfo=metainfo,
+    # format_only=True,
+    format_only=False,
     ann_file=data_root + 'annotations/test2.json',
     outfile_prefix='./work_dirs/tooth_detection/test',
     backend_args=backend_args,
