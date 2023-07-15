@@ -23,7 +23,8 @@ def main(args):
         categories = coco['categories']
 
         new_categories = copy.deepcopy(categories)
-        new_annotations = copy.deepcopy(annotations)
+        # new_annotations = copy.deepcopy(annotations)
+        new_annotations = []
 
         classes = args.classes
 
@@ -33,7 +34,8 @@ def main(args):
 
         for ann in annotations:
             if str(ann['category_id']) in classes: 
-                new_annotations.remove(ann) 
+                continue 
+            new_annotations.append(ann)
 
         save_coco(args.newfile, info, images, new_annotations, new_categories)
 
