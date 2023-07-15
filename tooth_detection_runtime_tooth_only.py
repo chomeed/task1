@@ -4,26 +4,22 @@ _base_ = '/home/summer23_intern1/workspace/p1/mmdetection/configs/_base_/models/
 dataset_type = 'CocoDataset'
 data_root = 'data/tooth_detection/'
 metainfo = {
-    'classes': ('Teeth defect', 'Tooth num 21', 'Tooth num 22', 'Tooth num 23', 
+    'classes': ('Tooth num 21', 'Tooth num 22', 'Tooth num 23', 
                 'Tooth num 24', 'Tooth num 25', 'Tooth num 26', 'Tooth num 27', 
                 'Tooth num 28', 'Tooth num 31', 'Tooth num 32', 'Tooth num 11', 
                 'Tooth num 33', 'Tooth num 34', 'Tooth num 35', 'Tooth num 36', 
                 'Tooth num 37', 'Tooth num 38', 'Tooth num 41', 'Tooth num 42', 
                 'Tooth num 43', 'Tooth num 44', 'Tooth num 12', 'Tooth num 45', 
-                'Tooth num 46', 'Tooth num 47', 'Tooth num 48', 'Phase 1', 'Phase 2', 'Phase 3', 
-                'Amalgam', 'Gold inlay', 'Tooth root exposure', 'Tooth num 13', 
-                'Gum inflammation', 'Metal-seramic', 'Gold', 'Metal', 'Tooth num 14', 
-                'Tooth num 15', 'Tooth num 16', 'Tooth num 17', 'Tooth num 18'),
-    'palette': [(220, 20, 60), (119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228), 
+                'Tooth num 46', 'Tooth num 47', 'Tooth num 48', 'Tooth num 13', 
+                'Tooth num 14', 'Tooth num 15', 'Tooth num 16', 'Tooth num 17', 'Tooth num 18'),
+    'palette': [(119, 11, 32), (0, 0, 142), (0, 0, 230), (106, 0, 228), 
                 (0, 60, 100), (0, 80, 100), (0, 0, 70), (0, 0, 192), (250, 170, 30), 
                 (100, 170, 30), (220, 220, 0), (175, 116, 175), (250, 0, 30), 
                 (165, 42, 42), (255, 77, 255), (0, 226, 252), (182, 182, 255), 
                 (0, 82, 0), (120, 166, 157), (110, 76, 0), (174, 57, 255), (199, 100, 0), 
-                (72, 0, 118), (255, 179, 240), (0, 125, 92), (209, 0, 151), (188, 208, 182),
-                  (0, 220, 176), (255, 99, 164), (92, 0, 73), (133, 129, 255), 
-                  (78, 180, 255), (0, 228, 0), (174, 255, 243), (45, 89, 255), 
-                  (134, 134, 103), (145, 148, 174), (255, 208, 186), (197, 226, 255), 
-                  (171, 134, 1), (109, 63, 54), (207, 138, 255)]
+                (72, 0, 118), (255, 179, 240), (0, 125, 92), (209, 0, 151), 
+                (0, 228, 0), (255, 208, 186), (197, 226, 255), 
+                (171, 134, 1), (109, 63, 54), (207, 138, 255)]
 }
 
 backend_args = None
@@ -39,6 +35,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile', backend_args=backend_args),
     dict(type='Resize', scale=(1333, 800), keep_ratio=True),
     dict(type='LoadAnnotations', with_bbox=True),
+    
     # If you don't have a gt annotation, delete the pipeline
     
     dict(
@@ -57,7 +54,7 @@ train_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='annotations/train.json',
+        ann_file='annotations/train_tooth_only.json',
         data_prefix=dict(img='sample/'),
         filter_cfg=dict(filter_empty_gt=True, min_size=32),
         pipeline=train_pipeline,
@@ -72,7 +69,7 @@ val_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='annotations/valid.json',
+        ann_file='annotations/valid_tooth_only.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
         pipeline=test_pipeline,
@@ -81,7 +78,7 @@ val_dataloader = dict(
 
 val_evaluator = dict(
     type='CocoMetric',
-    ann_file=data_root + 'annotations/valid.json',
+    ann_file=data_root + 'annotations/valid_tooth_only.json',
     metric='bbox',
     format_only=False,
     backend_args=backend_args)
@@ -99,7 +96,7 @@ test_dataloader = dict(
         type=dataset_type,
         data_root=data_root,
         metainfo=metainfo,
-        ann_file='annotations/test2.json',
+        ann_file='annotations/test2_tooth_only.json',
         data_prefix=dict(img='sample/'),
         test_mode=True,
         pipeline=test_pipeline))
@@ -107,9 +104,9 @@ test_evaluator = dict(
     type='CocoMetric',
     metric=['bbox', 'proposal'],
     # format_only=True,
-    format_only=True,
-    ann_file=data_root + 'annotations/test2.json',
-    outfile_prefix='./work_dirs/tooth_detection',
+    format_only=False,
+    ann_file=data_root + 'annotations/test2_tooth_only.json',
+    outfile_prefix='./work_dirs/tooth_only',
     backend_args=backend_args,
     classwise=True,
     )
